@@ -1,0 +1,9 @@
+pandas==X.Y.Z
+numpy==A.B.C
+matplotlib==D.E.F
+scikit-learn==G.H.I
+xgboost==J.K.L
+torch==M.N.O
+pmdarima==P.Q.R
+prophet==S.T.U
+darts[torch]==V.W.X
