@@ -44,4 +44,4 @@ Para executar este projeto, siga os passos abaixo:
 Após configurar o ambiente e instalar as dependências, execute o script principal:
 
 ```bash
-python 06_exercicio.py
+python 06_exercicio.py# S-RIES_TEMPORAIS_06
