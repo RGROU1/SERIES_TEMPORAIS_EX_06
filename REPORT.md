@@ -1,5 +1,5 @@
 
-# Previsão de Série Temporal trabalho intermediário ex 06
+# Previsão de Série Temporal trabalho intermediário
 
 Este projeto tem como objetivo ajustar e avaliar diferentes modelos de séries temporais para prever as próximas 18 observações de uma série temporal fornecida no arquivo `dados_amostra.csv`. O desempenho dos modelos é avaliado com base na métrica RMSE (Erro Quadrático Médio Raiz).
 
