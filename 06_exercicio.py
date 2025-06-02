@@ -15,8 +15,13 @@ import torch
 import os
 import math
 import pmdarima # Para isinstance no bloco de extração da ordem do ARIMA
+from statsmodels.tsa.seasonal import seasonal_decompose
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+from statsmodels.tsa.stattools import adfuller
 
-# Configurações do estilo do Matplotlib
+# Configurações do estilo do Matplotlib (output daos gráficos estavam ruins, 
+# então ajustei com o script abaixo - podem remover se não quiserem)
+
 plt.style.use('seaborn-v0_8-whitegrid')
 plt.rcParams['figure.facecolor'] = 'white'
 plt.rcParams['axes.facecolor'] = 'white'
@@ -224,3 +229,102 @@ if previsoes_finais is not None:
         print(f"Erro ao exportar CSV: {e}")
 else:
     print("Nenhum modelo foi selecionado ou treinado com sucesso para a previsão final.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Carregar dados
+df = pd.read_csv('dados_amostra.csv', header=None, names=['time_step', 'value'])
+print(df.head())
+
+
+# 1. Gráfico da série temporal original
+plt.figure(figsize=(12, 6))
+plt.plot(df['time_step'], df['value'])
+plt.title('Série Temporal Original')
+plt.xlabel('Time Step')
+plt.ylabel('Valor')
+plt.grid(True)
+plt.show()
+
+# 2. Decomposição ETS Aditiva
+decomposition = seasonal_decompose(df['value'], model='additive', period=12)
+fig = decomposition.plot()
+fig.set_size_inches(12, 8)
+plt.tight_layout()
+plt.show()
+
+# 3. Análise com Prophet
+from prophet import Prophet
+
+# Usa o DataFrame já preparado com datas reais
+df_prophet = df.copy()
+df_prophet['ds'] = pd.date_range(end=pd.Timestamp.today().normalize(), periods=len(df_prophet), freq='D')
+df_prophet = df_prophet.rename(columns={'value': 'y'})
+
+model = Prophet()
+model.fit(df_prophet[['ds', 'y']])
+future = model.make_future_dataframe(periods=0, freq='D')
+forecast = model.predict(future)
+fig_components = model.plot_components(forecast)
+plt.show()
+
+# 4. Gráficos ACF/PACF
+fig, ax = plt.subplots(2, 1, figsize=(12, 8))
+plot_acf(df['value'].dropna(), lags=40, ax=ax[0])
+plot_pacf(df['value'].dropna(), lags=40, ax=ax[1])
+plt.tight_layout()
+plt.show()
+
+# 5. Teste de Estacionariedade (ADF)
+def adf_test(series):
+    result = adfuller(series)
+    print(f'ADF Statistic: {result[0]:.4f}')
+    print(f'p-valor: {result[1]:.4f}')
+    print('Valores Críticos:')
+    for key, value in result[4].items():
+        print(f'\t{key}: {value:.4f}')
+
+print("\nTeste ADF para série original:")
+adf_test(df['value'])
+
+# 6. Primeira diferença e nova análise
+df['first_diff'] = df['value'].diff()
+
+plt.figure(figsize=(12, 6))
+plt.plot(df['time_step'][1:], df['first_diff'].iloc[1:])
+plt.title('Primeira Diferença da Série')
+plt.xlabel('Time Step')
+plt.ylabel('Valor Diferenciado')
+plt.grid(True)
+plt.show()
+
+fig, ax = plt.subplots(2, 1, figsize=(12, 8))
+plot_acf(df['first_diff'].dropna(), lags=40, ax=ax[0])
+plot_pacf(df['first_diff'].dropna(), lags=40, ax=ax[1])
+plt.tight_layout()
+plt.show()
+
+print("\nTeste ADF para primeira diferença:")
+adf_test(df['first_diff'].dropna())
+
+# 7. Decomposição da série diferenciada
+decomposition_diff = seasonal_decompose(df['first_diff'].dropna(), model='additive', period=12)
+fig = decomposition_diff.plot()
+fig.set_size_inches(12, 8)
+plt.tight_layout()
+plt.show()
