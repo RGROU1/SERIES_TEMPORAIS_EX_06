@@ -1,7 +1,8 @@
 
 # Exercício 06 – Análise de Predições com Modelos de Séries Temporais  
 
-Este projeto compara modelos clássicos e de machine learning aplicados à previsão de séries temporais, utilizando a biblioteca [Darts](https://github.com/unit8co/darts). O objetivo é avaliar o desempenho preditivo e gerar previsões futuras com base nos dados históricos fornecidos.
+Este projeto compara modelos clássicos de séries temporais (AutoARIMA e Prophet) com um modelo de machine learning (XGBoost), aplicados à previsão de séries temporais utilizando a biblioteca Darts. O objetivo é avaliar o desempenho preditivo e gerar previsões futuras com base em dados históricos.
+A escolha da biblioteca Darts para séries temporais é justificada por características que a tornam mais versátil e eficiente que alternativas como `pmdarima`, `Prophet` ou `Kats`
 
 ---
 
