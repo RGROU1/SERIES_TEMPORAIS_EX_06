@@ -1,6 +1,8 @@
 # Previsão de Série Temporal - Trabalho Intermediário
 
-Este projeto tem como objetivo ajustar e avaliar diferentes modelos de séries temporais para prever as próximas 18 observações de uma série temporal fornecida no arquivo `dados_amostra.csv`. O desempenho dos modelos é avaliado com base na métrica RMSE (Erro Quadrático Médio Raiz).
+Este projeto compara modelos clássicos de séries temporais (AutoARIMA e Prophet) com um modelo de machine learning (XGBoost), aplicados à previsão de séries temporais utilizando a biblioteca Darts. O objetivo é avaliar o desempenho preditivo e gerar previsões futuras com base em dados históricos. 
+
+A escolha da biblioteca Darts para séries temporais é justificada por características que a tornam mais versátil e eficiente que alternativas como `pmdarima`, `Prophet` ou `Kats`
 
 ## Estrutura do Projeto
 
